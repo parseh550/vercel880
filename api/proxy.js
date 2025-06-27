@@ -1,7 +1,7 @@
 const fetch = require('node-fetch');
 
 module.exports = async (req, res) => {
-  const url = 'https://morning-voice-9f1a.pparseh880.workers.dev' + req.url;
+  const url = 'home.playgame2025.jal.id.ir' + req.url;
 
   try {
     const response = await fetch(url, {
