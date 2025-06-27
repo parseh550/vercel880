@@ -17,15 +17,21 @@ module.exports = async (req, res) => {
       agent: agent,
     });
 
+    console.log(`Upstream status: ${response.status} ${response.statusText}`);
+
     if (!response.ok) {
+      const text = await response.text();
+      console.error('Upstream response body:', text);
+
       res.writeHead(response.status);
-      res.end(`Upstream server error: ${response.statusText}`);
+      res.end(`Upstream server error: ${response.statusText}\n${text}`);
       return;
     }
 
     res.writeHead(response.status, Object.fromEntries(response.headers));
     response.body.pipe(res);
   } catch (err) {
+    console.error('Fetch error:', err);
     res.writeHead(502);
     res.end('Bad Gateway: ' + err.message);
   }
