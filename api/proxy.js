@@ -1,14 +1,11 @@
-const { createServer } = require('http');
 const https = require('https');
 
-const targetHost = 'morning-voice-9f1a.pparseh880.workers.dev'; // ← اینجا آدرس ورکر خود را وارد کن
-
-createServer((req, res) => {
+module.exports = (req, res) => {
   const options = {
-    hostname: targetHost,
+    hostname: 'morning-voice-9f1a.pparseh880.workers.dev',
     path: req.url,
     method: req.method,
-    headers: req.headers,
+    headers: req.headers
   };
 
   const proxy = https.request(options, (proxyRes) => {
@@ -22,4 +19,4 @@ createServer((req, res) => {
     res.writeHead(500);
     res.end(`Error: ${e.message}`);
   });
-}).listen();
+};
