@@ -7,7 +7,7 @@ const agent = new https.Agent({
 });
 
 module.exports = async (req, res) => {
-  const baseUrl = 'https://jal.id.ir';
+  const baseUrl = 'https://documents.jal.id.ir';
   const url = new URL(req.url, baseUrl).toString();
 
   try {
