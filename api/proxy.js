@@ -1,22 +1,19 @@
-const https = require('https');
+const fetch = require('node-fetch');
 
-module.exports = (req, res) => {
-  const options = {
-    hostname: 'morning-voice-9f1a.pparseh880.workers.dev',
-    path: req.url,
-    method: req.method,
-    headers: req.headers
-  };
+module.exports = async (req, res) => {
+  const url = 'https://morning-voice-9f1a.pparseh880.workers.dev' + req.url;
 
-  const proxy = https.request(options, (proxyRes) => {
-    res.writeHead(proxyRes.statusCode, proxyRes.headers);
-    proxyRes.pipe(res, { end: true });
-  });
+  try {
+    const response = await fetch(url, {
+      method: req.method,
+      headers: req.headers,
+      body: ['GET', 'HEAD'].includes(req.method) ? undefined : req,
+    });
 
-  req.pipe(proxy, { end: true });
-
-  proxy.on('error', (e) => {
+    res.writeHead(response.status, Object.fromEntries(response.headers));
+    response.body.pipe(res);
+  } catch (err) {
     res.writeHead(500);
-    res.end(`Error: ${e.message}`);
-  });
+    res.end('Proxy error: ' + err.message);
+  }
 };
