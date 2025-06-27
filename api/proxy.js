@@ -1,9 +1,8 @@
-const https = require('https');
 const fetch = require('node-fetch');
+const https = require('https');
 
 const agent = new https.Agent({
-  rejectUnauthorized: false,  // فقط برای تست؛ در محیط واقعی استفاده نکنید
-  secureProtocol: 'TLS_method' // می‌توانید 'TLSv1_2_method' یا 'TLSv1_3_method' امتحان کنید
+  rejectUnauthorized: false,
 });
 
 module.exports = async (req, res) => {
@@ -18,10 +17,16 @@ module.exports = async (req, res) => {
       agent: agent,
     });
 
+    if (!response.ok) {
+      res.writeHead(response.status);
+      res.end(`Upstream server error: ${response.statusText}`);
+      return;
+    }
+
     res.writeHead(response.status, Object.fromEntries(response.headers));
     response.body.pipe(res);
   } catch (err) {
-    res.writeHead(500);
-    res.end('Proxy error: ' + err.message);
+    res.writeHead(502);
+    res.end('Bad Gateway: ' + err.message);
   }
 };
