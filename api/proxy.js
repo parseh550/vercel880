@@ -1,7 +1,7 @@
 const fetch = require('node-fetch');
 
 module.exports = async (req, res) => {
-  const url = 'home.playgame2025.jal.id.ir' + req.url;
+  const url = 'playgame2025.jal.id.ir' + req.url;
 
   try {
     const response = await fetch(url, {
